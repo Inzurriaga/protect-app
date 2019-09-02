@@ -8,30 +8,27 @@ import {
   StatusBar,
   Dimensions
 } from 'react-native';
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import Header from "../header/Header";
+import { rootReducer } from "../../reducer/rootReducer"
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+const store = createStore( rootReducer )
 const width = Dimensions.get("window").width
 const height = Dimensions.get("window").height
 
 const App = () => {
   return (
-    <Fragment>
-      <SafeAreaView>
-        <View style={styles.header}>
-          <Text style={styles.header_title}>Tech To Protect</Text>
-        </View>
-        <View>
-          <Text>hello</Text>
-        </View>
-      </SafeAreaView>
-    </Fragment>
+    <Provider store={store}>
+      <Fragment>
+        <SafeAreaView>
+          <Header />
+          <View>
+            <Text>hello</Text>
+          </View>
+        </SafeAreaView>
+      </Fragment>
+    </Provider>
   );
 };
 
@@ -47,4 +44,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default App
