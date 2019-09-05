@@ -1,4 +1,5 @@
 import React, {Fragment} from 'react';
+import { connect } from "react-redux";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,26 +9,23 @@ import {
   StatusBar,
   Dimensions
 } from 'react-native';
-import { Provider } from "react-redux";
-import { createStore } from "redux";
 import Header from "../header/Header";
 import Login from "../login/Login";
-import { rootReducer } from "../../reducer/rootReducer"
+import DashBoard from '../dashboard/Dashboard';
 
-const store = createStore( rootReducer )
 const width = Dimensions.get("window").width
 const height = Dimensions.get("window").height
 
-const App = () => {
+const App = (props) => {
   return (
-    <Provider store={store}>
       <Fragment>
         <SafeAreaView>
           <Header />
-          <Login />
+          {
+            props.login ? <DashBoard /> : <Login />
+          }
         </SafeAreaView>
       </Fragment>
-    </Provider>
   );
 };
 
@@ -43,4 +41,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App
+const mapStateToProps = (state) => ({
+  login: state.login
+})
+
+export default connect(mapStateToProps)(App)

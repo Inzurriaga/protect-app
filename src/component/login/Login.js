@@ -1,10 +1,12 @@
 import React, { Fragment, Component } from "react";
+import { connect } from "react-redux";
+import { toggleLogin } from "../../action";
 
 import {
   View,
   Text,
   TextInput,
-  Button,
+  TouchableOpacity,
   SafeAreaView,
   StyleSheet,
   Dimensions
@@ -13,12 +15,16 @@ import {
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export default class Login extends Component {
+export class Login extends Component {
   constructor() {
     super();
     this.state = {
       test: "hello world"
     }
+  }
+
+  loginInUser = () => {
+    this.props.toggleLogin(true)
   }
 
   render() {
@@ -37,7 +43,9 @@ export default class Login extends Component {
             <Text>password</Text>
             <TextInput style={styles.input}/>
           </View>
-          <Button title="Login"/>
+          <TouchableOpacity onPress={this.loginInUser} title="Login" style={styles.button}>
+            <Text>Login</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </Fragment>
     )
@@ -63,5 +71,19 @@ const styles = StyleSheet.create({
     width: width * .8,
     padding: 10
   },
+  button: {
+    backgroundColor: "#ffffff",
+    borderColor: "#000000",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRadius:  25,
+    padding: 10,
+  }
 });
+
+const mapDispatchToProps = ( dispatch ) => ({
+  toggleLogin: bool => dispatch(toggleLogin(bool))
+})
+
+export default connect(null, mapDispatchToProps)(Login)
 
