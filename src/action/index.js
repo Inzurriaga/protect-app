@@ -1,4 +1,4 @@
-const toggleLogin = (bool) => ({
+export const toggleLogin = (bool) => ({
   type: "LOGIN",
   bool
 })

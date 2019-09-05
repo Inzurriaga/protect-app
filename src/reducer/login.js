@@ -1,4 +1,4 @@
-export const login = (state = false, action) => {
+export const login = (state = true, action) => {
   switch(action.type) {
     case "LOGIN":
       return action.bool;

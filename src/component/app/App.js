@@ -11,6 +11,7 @@ import {
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import Header from "../header/Header";
+import Login from "../login/Login";
 import { rootReducer } from "../../reducer/rootReducer"
 
 const store = createStore( rootReducer )
@@ -23,9 +24,7 @@ const App = () => {
       <Fragment>
         <SafeAreaView>
           <Header />
-          <View>
-            <Text>hello</Text>
-          </View>
+          <Login />
         </SafeAreaView>
       </Fragment>
     </Provider>

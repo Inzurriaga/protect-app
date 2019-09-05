@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
 import { connect } from "react-redux";
 import { View, Text, Button } from "react-native";
-import { toggleLogin } from "../../action";
+import { toggleLogin } from "../../action/index.js";
 
 export class Header extends Component {
   constructor() {
@@ -12,9 +12,7 @@ export class Header extends Component {
   }
 
   loginOut = () => {
-    this.setState({
-      login: false
-    })
+    this.props.toggleLogin(false)
   }
 
   render() {
@@ -37,4 +35,4 @@ const mapDispatchToProps = (dispatch) => ({
   toggleLogin: bool => dispatch(toggleLogin(bool))
 })
 
-export default connect()(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
