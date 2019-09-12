@@ -1,8 +1,10 @@
 import React, {  Component ,Fragment } from "react";
 import { connect } from "react-redux";
+import io from 'socket.io-client/dist/socket.io';
 import {
   View,
   Text,
+  Button,
   SafeAreaView
 } from "react-native";
 
@@ -10,8 +12,34 @@ export class DashBoard extends Component {
   constructor() {
     super();
     this.state = {
-      test: "hello"
+      user: {
+        userId: 123,
+        name: "bill",
+        pulse: 97,
+        sp02: 95,
+        temperature: 98,
+        co2: 180,
+        co: 90,
+        h2s: 90
+      }
     }
+    this.socket = io("http://localhost:3000");
+    this.socket.emit('what', 'Hi server im the app');
+    this.live = setInterval(() => {
+      this.socket.emit("what", this.state.user)
+    }, 5000)
+  }
+
+  componentDidMount() {
+    this.hello()
+  }
+
+  hello = async () => {
+    const response = await fetch("http://localhost:3000")
+  }
+
+  send = () => {
+    this.socket.emit("what", "hello im the button")
   }
 
   render() {
@@ -44,6 +72,7 @@ export class DashBoard extends Component {
               <Text>120 pp</Text>
             </View>
           </View>
+          <Button onPress={this.send}title="hello"></Button>
         </SafeAreaView>
       </Fragment>
     ) 
