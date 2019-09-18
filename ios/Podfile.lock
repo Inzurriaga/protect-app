@@ -58,6 +58,10 @@ PODS:
   - React-jsinspector (0.60.5)
   - react-native-background-timer (2.1.1):
     - React
+  - react-native-ble-plx (1.1.0):
+    - React
+    - react-native-ble-plx-swift
+  - react-native-ble-plx-swift (1.1.0)
   - react-native-geolocation (2.0.2):
     - React
   - React-RCTActionSheet (0.60.5):
@@ -97,6 +101,8 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
+  - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
+  - react-native-ble-plx-swift (from `../node_modules/react-native-ble-plx`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -137,6 +143,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
+  react-native-ble-plx:
+    :path: "../node_modules/react-native-ble-plx"
+  react-native-ble-plx-swift:
+    :path: "../node_modules/react-native-ble-plx"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   React-RCTActionSheet:
@@ -175,6 +185,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
   react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
+  react-native-ble-plx: 05e16667ebf56cf802986379fd58a377847885e8
+  react-native-ble-plx-swift: e0d041529bd7ae66eb9731123eca3df3d132e8ec
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e
@@ -188,6 +200,6 @@ SPEC CHECKSUMS:
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
 
-PODFILE CHECKSUM: 4fe8af3454227dd2cf7c4e3b9c196070e12b5321
+PODFILE CHECKSUM: 4ba07a72248be6d71e4fcf35354be3799a1da5f2
 
 COCOAPODS: 1.7.5

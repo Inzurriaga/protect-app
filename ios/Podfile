@@ -1,4 +1,5 @@
 platform :ios, '9.0'
+ENV['SWIFT_VERSION'] = '3'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'hackathonApp' do
@@ -27,11 +28,15 @@ target 'hackathonApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-
+  # geolocation
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
-
+  # background timer 
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
+  # bluetooth
+  pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+  pod 'react-native-ble-plx-swift', :path => '../node_modules/react-native-ble-plx'
 
   target 'hackathonAppTests' do
     inherit! :search_paths

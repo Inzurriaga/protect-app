@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Geolocation from '@react-native-community/geolocation';
 import BackgroundTimer from "react-native-background-timer";
+import bleManager from "react-native-ble-plx";
 
 export class DashBoard extends Component {
   constructor() {
@@ -30,7 +31,8 @@ export class DashBoard extends Component {
     }
     // web socket 
     this.socket = io("http://localhost:3000");
-    // geolaction 
+    // bluetooth 
+    console.log(bleManager)
   }
 
   componentDidMount() {
@@ -39,8 +41,14 @@ export class DashBoard extends Component {
       authorizationLevel: "always"
     });
 
+    // geolocation
     Geolocation.watchPosition(this.geoSuccess, this.geoError);
 
+    // bleManager.startDeviceScan( null, null, (error, device) => {
+    //   console.log(device)
+    // })
+
+    // background timer 
     BackgroundTimer.runBackgroundTimer(() => { 
       const num =Math.floor(Math.random() * 10)
       const user = {...this.state.user, co: num}
@@ -50,11 +58,11 @@ export class DashBoard extends Component {
       })
       }, 
       1000);
+
   }
 
   geoSuccess = (position) => {
     const {latitude, longitude } = position.coords
-    console.log(latitude, longitude)
     this.setState({
       user: {...this.state.user, lat: latitude, long: longitude}
     })
@@ -65,8 +73,7 @@ export class DashBoard extends Component {
   }
 
   render() {
-    const { user, timer, timerL } = this.state;
-    console.log(user)
+    const { user, timer } = this.state;
     return(
       <Fragment>
         <SafeAreaView>
