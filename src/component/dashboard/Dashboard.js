@@ -5,7 +5,9 @@ import {
   View,
   Text,
   SafeAreaView
-} from "react-native";import Geolocation from '@react-native-community/geolocation';
+} from "react-native";
+import Geolocation from '@react-native-community/geolocation';
+import BackgroundTimer from "react-native-background-timer";
 
 export class DashBoard extends Component {
   constructor() {
@@ -22,7 +24,9 @@ export class DashBoard extends Component {
         h2s: 90,
         lat: 0,
         long: 0,
-      }
+      },
+      timer: 0,
+      timerL: 0
     }
     // web socket 
     this.socket = io("http://localhost:3000");
@@ -34,13 +38,18 @@ export class DashBoard extends Component {
       skipPermissionRequests: true,
       authorizationLevel: "always"
     });
+
     Geolocation.watchPosition(this.geoSuccess, this.geoError);
-    this.live = setInterval(() => {
+
+    BackgroundTimer.runBackgroundTimer(() => { 
       const num =Math.floor(Math.random() * 10)
       const user = {...this.state.user, co: num}
       this.socket.emit("what", user)
-      this.setState({user})
-    }, 1000);
+      this.setState({ user, 
+        timer: this.state.timer + 1
+      })
+      }, 
+      1000);
   }
 
   geoSuccess = (position) => {
@@ -56,7 +65,7 @@ export class DashBoard extends Component {
   }
 
   render() {
-    const { user } = this.state;
+    const { user, timer, timerL } = this.state;
     console.log(user)
     return(
       <Fragment>
@@ -92,13 +101,16 @@ export class DashBoard extends Component {
             <Text>Lat {user.lat}</Text>
             <Text>long {user.long}</Text>
           </View>
+          <View>
+            <Text>library {timer}</Text>
+          </View>
         </SafeAreaView>
       </Fragment>
     ) 
   }
 
   componentWillUnmount() {
-    clearInterval(this.live)
+    BackgroundTimer.stopBackgroundTimer();
   }
 }
 
