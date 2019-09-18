@@ -4,9 +4,8 @@ import io from 'socket.io-client/dist/socket.io';
 import {
   View,
   Text,
-  Button,
   SafeAreaView
-} from "react-native";
+} from "react-native";import Geolocation from '@react-native-community/geolocation';
 
 export class DashBoard extends Component {
   constructor() {
@@ -20,62 +19,86 @@ export class DashBoard extends Component {
         temperature: 98,
         co2: 180,
         co: 90,
-        h2s: 90
+        h2s: 90,
+        lat: 0,
+        long: 0,
       }
     }
+    // web socket 
     this.socket = io("http://localhost:3000");
-    this.socket.emit('what', 'Hi server im the app');
-    this.live = setInterval(() => {
-      this.socket.emit("what", this.state.user)
-    }, 5000)
+    // geolaction 
   }
 
   componentDidMount() {
-    this.hello()
+    Geolocation.setRNConfiguration({
+      skipPermissionRequests: true,
+      authorizationLevel: "always"
+    });
+    Geolocation.watchPosition(this.geoSuccess, this.geoError);
+    this.live = setInterval(() => {
+      const num =Math.floor(Math.random() * 10)
+      const user = {...this.state.user, co: num}
+      this.socket.emit("what", user)
+      this.setState({user})
+    }, 1000);
   }
 
-  hello = async () => {
-    const response = await fetch("http://localhost:3000")
+  geoSuccess = (position) => {
+    const {latitude, longitude } = position.coords
+    console.log(latitude, longitude)
+    this.setState({
+      user: {...this.state.user, lat: latitude, long: longitude}
+    })
   }
 
-  send = () => {
-    this.socket.emit("what", "hello im the button")
+  geoError() {
+    console.log("hello im the geo")
   }
 
   render() {
+    const { user } = this.state;
+    console.log(user)
     return(
       <Fragment>
         <SafeAreaView>
           <View>
             <Text>Heart Rate</Text>
-            <Text>93 bpm</Text>
+            <Text>{user.pulse} bpm</Text>
           </View>
           <View>
             <Text>SPO2</Text>
-            <Text>93 bpm</Text>
+            <Text>{user.sp02} bpm</Text>
           </View>
           <View>
             <Text>Temp</Text>
-            <Text>98 F</Text>
+            <Text>{user.temperature} F</Text>
           </View>
           <View>
             <View>
               <Text>Co2</Text>
-              <Text>120 pp</Text>
+              <Text>{user.co2} pp</Text>
             </View>
             <View>
               <Text>CO</Text>
-              <Text>110 pp</Text>
+              <Text>{user.co} pp</Text>
             </View>
             <View>
               <Text>H2S</Text>
-              <Text>120 pp</Text>
+              <Text>{user.h2s} pp</Text>
             </View>
           </View>
-          <Button onPress={this.send}title="hello"></Button>
+          <View>
+            <Text>location</Text>
+            <Text>Lat {user.lat}</Text>
+            <Text>long {user.long}</Text>
+          </View>
         </SafeAreaView>
       </Fragment>
     ) 
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.live)
   }
 }
 
