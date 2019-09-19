@@ -2,13 +2,15 @@ import React, {  Component ,Fragment } from "react";
 import { connect } from "react-redux";
 import io from 'socket.io-client/dist/socket.io';
 import {
+  PermissionsAndroid,
   View,
   Text,
   SafeAreaView
 } from "react-native";
-import Geolocation from '@react-native-community/geolocation';
 import BackgroundTimer from "react-native-background-timer";
-import bleManager from "react-native-ble-plx";
+import { BleManager } from "react-native-ble-plx";
+import Location from "../location/Location"
+
 
 export class DashBoard extends Component {
   constructor() {
@@ -23,30 +25,24 @@ export class DashBoard extends Component {
         co2: 180,
         co: 90,
         h2s: 90,
-        lat: 0,
-        long: 0,
       },
       timer: 0,
-      timerL: 0
+      timerL: 0,
+      bluetooth: "none"
     }
     // web socket 
     this.socket = io("http://localhost:3000");
     // bluetooth 
-    console.log(bleManager)
+    this.manager = new BleManager()
   }
 
   componentDidMount() {
-    Geolocation.setRNConfiguration({
-      skipPermissionRequests: true,
-      authorizationLevel: "always"
-    });
-
-    // geolocation
-    Geolocation.watchPosition(this.geoSuccess, this.geoError);
-
-    // bleManager.startDeviceScan( null, null, (error, device) => {
-    //   console.log(device)
-    // })
+    this.manager.startDeviceScan( null, null, (error, device) => {
+      console.log(device)
+      this.setState({
+        bluetooth: device 
+      })
+    })
 
     // background timer 
     BackgroundTimer.runBackgroundTimer(() => { 
@@ -61,19 +57,8 @@ export class DashBoard extends Component {
 
   }
 
-  geoSuccess = (position) => {
-    const {latitude, longitude } = position.coords
-    this.setState({
-      user: {...this.state.user, lat: latitude, long: longitude}
-    })
-  }
-
-  geoError() {
-    console.log("hello im the geo")
-  }
-
   render() {
-    const { user, timer } = this.state;
+    const { user, timer, bluetooth } = this.state;
     return(
       <Fragment>
         <SafeAreaView>
@@ -103,13 +88,10 @@ export class DashBoard extends Component {
               <Text>{user.h2s} pp</Text>
             </View>
           </View>
-          <View>
-            <Text>location</Text>
-            <Text>Lat {user.lat}</Text>
-            <Text>long {user.long}</Text>
-          </View>
+          <Location />
           <View>
             <Text>library {timer}</Text>
+            <Text>device {bluetooth}</Text>
           </View>
         </SafeAreaView>
       </Fragment>
@@ -118,6 +100,7 @@ export class DashBoard extends Component {
 
   componentWillUnmount() {
     BackgroundTimer.stopBackgroundTimer();
+
   }
 }
 
