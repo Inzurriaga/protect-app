@@ -2,7 +2,6 @@ import React, {  Component ,Fragment } from "react";
 import { connect } from "react-redux";
 import io from 'socket.io-client/dist/socket.io';
 import {
-  PermissionsAndroid,
   View,
   Text,
   SafeAreaView
@@ -37,24 +36,28 @@ export class DashBoard extends Component {
   }
 
   componentDidMount() {
-    this.manager.startDeviceScan( null, null, (error, device) => {
-      console.log(device)
-      this.setState({
-        bluetooth: device 
-      })
+    this.manager.startDeviceScan(null, null, (error, device) => {
+      if(device.name === "DSD TECH") {
+        this.manager.stopDeviceScan();
+        this.manager.connectToDevice(device.id).then((connectedDevice) => {
+          console.log(connectedDevice)
+          connectedDevice.discoverAllServicesAndCharacteristics(
+            connectedDevice.id
+          ).then(() => {
+            console.log(connectedDevice)
+            this.manager.monitorCharacteristicForDevice(connectedDevice.id, "0000ffe0-0000-1000-8000-00805f9b34fb", "0000ffe1-0000-1000-8000-00805f9b34fb", (error, char) => {
+              console.log(atob(char.value))
+            })
+          })
+        })
+      }
     })
 
-    // background timer 
-    BackgroundTimer.runBackgroundTimer(() => { 
-      const num =Math.floor(Math.random() * 10)
-      const user = {...this.state.user, co: num}
-      this.socket.emit("what", user)
-      this.setState({ user, 
-        timer: this.state.timer + 1
-      })
-      }, 
+    upDateStatus = () => {
+      BackgroundTimer.runBackgroundTimer(() => { 
+      },
       1000);
-
+    }
   }
 
   render() {
@@ -100,7 +103,6 @@ export class DashBoard extends Component {
 
   componentWillUnmount() {
     BackgroundTimer.stopBackgroundTimer();
-
   }
 }
 
