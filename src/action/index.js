@@ -8,3 +8,8 @@ export const locationUpdate = (lat, long) => ({
   lat,
   long
 })
+
+export const bluetoothConnection = (bool) => ({
+  type: "BLUETOOTH_CONNECTION",
+  bool
+})

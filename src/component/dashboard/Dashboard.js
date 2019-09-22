@@ -4,11 +4,18 @@ import io from 'socket.io-client/dist/socket.io';
 import {
   View,
   Text,
-  SafeAreaView
+  StyleSheet,
+  SafeAreaView,
+  Dimensions
+  
 } from "react-native";
-import BackgroundTimer from "react-native-background-timer";
+// import BackgroundTimer from "react-native-background-timer";
 import { BleManager } from "react-native-ble-plx";
 import Location from "../location/Location"
+import { bluetoothConnection } from "../../action"
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 
 export class DashBoard extends Component {
@@ -20,14 +27,12 @@ export class DashBoard extends Component {
         name: "bill",
         pulse: 97,
         sp02: 95,
-        temperature: 98,
+        temperature: 0,
         co2: 180,
         co: 90,
         h2s: 90,
       },
-      timer: 0,
-      timerL: 0,
-      bluetooth: "none"
+      bluetoothScanning: true,
     }
     // web socket 
     this.socket = io("http://localhost:3000");
@@ -35,75 +40,117 @@ export class DashBoard extends Component {
     this.manager = new BleManager()
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    console.log(this.state.user)
+    console.log(this.props.bluetoothConnectionStatus)
     this.manager.startDeviceScan(null, null, (error, device) => {
-      if(device.name === "DSD TECH") {
+      console.log(device)
+      if(device.name === "DSD TECH" && !this.props.bluetoothConnectionStatus ) {
         this.manager.stopDeviceScan();
-        this.manager.connectToDevice(device.id).then((connectedDevice) => {
-          console.log(connectedDevice)
-          connectedDevice.discoverAllServicesAndCharacteristics(
-            connectedDevice.id
-          ).then(() => {
-            console.log(connectedDevice)
-            this.manager.monitorCharacteristicForDevice(connectedDevice.id, "0000ffe0-0000-1000-8000-00805f9b34fb", "0000ffe1-0000-1000-8000-00805f9b34fb", (error, char) => {
-              console.log(atob(char.value))
-            })
-          })
-        })
+        this.setState({
+          bluetoothScanning: false
+        }, this.connectToDevice(device))
       }
     })
+  }
 
-    upDateStatus = () => {
-      BackgroundTimer.runBackgroundTimer(() => { 
-      },
-      1000);
-    }
+
+  connectToDevice = (device) => {
+    this.manager.connectToDevice(device.id).then((connectedDevice) => {
+      connectedDevice.discoverAllServicesAndCharacteristics(
+        connectedDevice.id
+      ).then(() => {
+        this.props.bluetoothConnection(true);
+        this.monitorDevice(connectedDevice);
+      })
+    })
+  }
+
+  monitorDevice = (connectedDevice) => {
+    this.manager.monitorCharacteristicForDevice(connectedDevice.id, "0000ffe0-0000-1000-8000-00805f9b34fb", "0000ffe1-0000-1000-8000-00805f9b34fb", (error, char) => {
+      this.setState({
+        user: {...this.state.user, temperature: Math.round(atob(char.value)*10)/10 }
+      }, this.updateHub() )
+    })
+  }
+
+  updateHub = () => {
+    console.log(this.state.user.temperature)
   }
 
   render() {
-    const { user, timer, bluetooth } = this.state;
+    const { user } = this.state;
     return(
       <Fragment>
         <SafeAreaView>
-          <View>
-            <Text>Heart Rate</Text>
-            <Text>{user.pulse} bpm</Text>
-          </View>
-          <View>
-            <Text>SPO2</Text>
-            <Text>{user.sp02} bpm</Text>
-          </View>
-          <View>
-            <Text>Temp</Text>
-            <Text>{user.temperature} F</Text>
-          </View>
-          <View>
-            <View>
-              <Text>Co2</Text>
-              <Text>{user.co2} pp</Text>
+          <View style={styles.sensorContainer}>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{user.pulse} bpm</Text>
+              <Text style={styles.DataTypeText}>Heart Rate</Text>
             </View>
-            <View>
-              <Text>CO</Text>
-              <Text>{user.co} pp</Text>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{user.sp02} bpm</Text>
+              <Text style={styles.DataTypeText}>SPO2</Text>
             </View>
-            <View>
-              <Text>H2S</Text>
-              <Text>{user.h2s} pp</Text>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{ user.temperature + "\u00b0 F" }</Text>
+              <Text style={styles.DataTypeText}>Temp</Text>
+            </View>
+          </View>
+          <View style={styles.sensorContainer}>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{user.co2} pp</Text>
+              <Text style={styles.DataTypeText}>Co2</Text>
+            </View>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{user.co} pp</Text>
+              <Text style={styles.DataTypeText}>CO</Text>
+            </View>
+            <View style={styles.sensorData}>
+              <Text style={styles.sensorDataText}>{user.h2s} pp</Text>
+              <Text style={styles.DataTypeText}>H2S</Text>
             </View>
           </View>
           <Location />
-          <View>
-            <Text>library {timer}</Text>
-            <Text>device {bluetooth}</Text>
-          </View>
         </SafeAreaView>
       </Fragment>
     ) 
   }
 
   componentWillUnmount() {
-    BackgroundTimer.stopBackgroundTimer();
+    // this.manager.cancelDeviceConnection()
   }
 }
 
-export default connect()(DashBoard)
+export const mapStateToProps = (state) => ({
+  bluetoothConnectionStatus: state.bluetoothConnectionStatus
+})
+
+export const mapDispatchToProps = (dispatch) => ({
+  bluetoothConnection: bool => dispatch(bluetoothConnection(bool))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashBoard)
+
+const styles = StyleSheet.create({
+  sensorContainer: {
+    backgroundColor: "#ffffff",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    borderRadius: 25,
+    margin: 10,
+    backgroundColor: "#1d1d1d",
+  },
+  sensorData: {
+    padding: 20,
+  },
+  sensorDataText: {
+    fontSize: 30,
+    color: "#ffffff"
+  },
+  DataTypeText: {
+    textAlign: "center",
+    color: "#ffffff"
+  }
+});

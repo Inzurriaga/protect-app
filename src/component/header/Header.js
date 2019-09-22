@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from "react";
 import { connect } from "react-redux";
-import { View, Text, Button, StyleSheet} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet} from "react-native";
 import { toggleLogin } from "../../action/index.js";
 
 export class Header extends Component {
@@ -21,7 +21,7 @@ export class Header extends Component {
         <View style={styles.header}>
           <Text style={styles.title}>Tech To Protect</Text>
           {
-            this.props.login ? <Button onPress={this.loginOut} title="Log Out"></Button> : null
+            this.props.login ? <TouchableOpacity onPress={this.loginOut}><Text style={styles.logOut}>LogOUt</Text></TouchableOpacity> : null
           }
         </View>
       </Fragment>
@@ -32,11 +32,19 @@ export class Header extends Component {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#000000",
-    height: 50,
+    height: 80,
+    padding: 20
   },
   title: {
     color: "#ffffff",
+    fontSize: 20,
+    fontWeight: "bold",
     textAlign: "center",
+  },
+  logOut: {
+    color: "#ef3405",
+    fontWeight: "bold",
+    textAlign: "right"
   }
 })
 

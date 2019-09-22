@@ -2,7 +2,8 @@ import React, { Fragment, Component } from "react";
 import { connect } from "react-redux";
 import {
     Text,
-    View
+    View,
+    StyleSheet
 } from "react-native";
 import RNLocation from "react-native-location";
 
@@ -10,7 +11,10 @@ export class Location extends Component {
     constructor() {
         super();
         this.state = {
-            location: 0
+            location: {
+                longitude: 0,
+                latitude: 0
+            }
         }
         RNLocation.configure({
             distanceFilter: 0,
@@ -74,9 +78,15 @@ export class Location extends Component {
         const { location } = this.state;
         return(
             <Fragment>
-                <View>
-                    <Text>latitude {location.latitude} </Text>
-                    <Text>longitude {location.longitude}</Text>
+                <View style={styles.sensorContainer}>
+                    <View style={styles.sensorData}>
+                        <Text style={styles.sensorDataText}>{location.latitude} </Text>
+                        <Text style={styles.DataTypeText}>latitude</Text>
+                    </View>
+                    <View style={styles.sensorData}>
+                        <Text style={styles.sensorDataText}>{location.longitude}</Text>
+                        <Text style={styles.DataTypeText}>longitude</Text>
+                    </View>
                 </View>
             </Fragment>
         )
@@ -88,3 +98,26 @@ export class Location extends Component {
 }
 
 export default connect()(Location)
+
+const styles = StyleSheet.create({
+    sensorContainer: {
+      backgroundColor: "#ffffff",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+      borderRadius: 25,
+      margin: 10,
+      backgroundColor: "#1d1d1d",
+    },
+    sensorData: {
+      padding: 20
+    },
+    sensorDataText: {
+      fontSize: 30,
+      color: "#ffffff"
+    },
+    DataTypeText: {
+      textAlign: "center",
+      color: "#ffffff"
+    }
+  });

@@ -3,10 +3,6 @@ import { connect } from "react-redux";
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
   Dimensions
 } from 'react-native';
 import Header from "../header/Header";
@@ -19,17 +15,27 @@ const height = Dimensions.get("window").height
 const App = (props) => {
   return (
       <Fragment>
-        <SafeAreaView>
-          <Header />
-          {
-            props.login ? <DashBoard /> : <Login />
-          }
+        <SafeAreaView style={styles.app}>
+            <Header />
+            {
+              props.login ? <DashBoard /> : <Login />
+            }
         </SafeAreaView>
       </Fragment>
   );
 };
 
+const mapStateToProps = (state) => ({
+  login: state.login
+})
+
+export default connect(mapStateToProps)(App);
+
 const styles = StyleSheet.create({
+  app: {
+    flex: 1,
+    backgroundColor: "#000000"
+  },
   header: {
     backgroundColor: "#000000",
     height: 30,
@@ -40,9 +46,3 @@ const styles = StyleSheet.create({
     textAlign: "center"
   }
 });
-
-const mapStateToProps = (state) => ({
-  login: state.login
-})
-
-export default connect(mapStateToProps)(App)

@@ -32,19 +32,19 @@ export class Login extends Component {
       <Fragment>
         <SafeAreaView style={styles.login}>
           <View style={styles.inputForm}>
-            <Text>Station ID</Text>
+            <Text style={styles.text}>Station ID</Text>
             <TextInput style={styles.input}/>
           </View>
           <View style={styles.inputForm}>
-            <Text>username</Text>
+            <Text style={styles.text}>username</Text>
             <TextInput style={styles.input}/>
           </View>
           <View style={styles.inputForm}>
-            <Text>password</Text>
+            <Text style={styles.text}>password</Text>
             <TextInput style={styles.input}/>
           </View>
           <TouchableOpacity onPress={this.loginInUser} title="Login" style={styles.button}>
-            <Text>Login</Text>
+            <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
         </SafeAreaView>
       </Fragment>
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#000000",
+    backgroundColor: "#1d1d1d",
+    color: "#ffffff",
     borderStyle: "solid",
     borderWidth: 1,
     borderRadius: 25,
@@ -71,13 +71,22 @@ const styles = StyleSheet.create({
     width: width * .8,
     padding: 10
   },
+  text: {
+    color: "#ffffff",
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 10
+  },
   button: {
-    backgroundColor: "#ffffff",
-    borderColor: "#000000",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderRadius:  25,
-    padding: 10,
+    color: "#ffffff",
+    width: 70
+    
+  },
+  loginText: {
+    color: "#70ea4e",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });
 
