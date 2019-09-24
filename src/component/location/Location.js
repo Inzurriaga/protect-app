@@ -6,6 +6,10 @@ import {
     StyleSheet
 } from "react-native";
 import RNLocation from "react-native-location";
+import MapboxGL  from "@react-native-mapbox-gl/maps";
+import {REACT_APP_API_MAP} from "react-native-dotenv";
+
+MapboxGL.setAccessToken(REACT_APP_API_MAP);
 
 export class Location extends Component {
     constructor() {
@@ -38,6 +42,7 @@ export class Location extends Component {
     }
 
     async componentDidMount() {
+        MapboxGL.setTelemetryEnabled(false);
         const permission = await RNLocation.checkPermission({
             ios: "whenInUse", // test in ios
             android: {
@@ -78,14 +83,25 @@ export class Location extends Component {
         const { location } = this.state;
         return(
             <Fragment>
-                <View style={styles.sensorContainer}>
-                    <View style={styles.sensorData}>
-                        <Text style={styles.sensorDataText}>{location.latitude} </Text>
-                        <Text style={styles.DataTypeText}>latitude</Text>
-                    </View>
-                    <View style={styles.sensorData}>
-                        <Text style={styles.sensorDataText}>{location.longitude}</Text>
-                        <Text style={styles.DataTypeText}>longitude</Text>
+                <View style={styles.locationContainer}>
+                    <MapboxGL.MapView  style={styles.map}>
+                    <MapboxGL.Camera
+                        zoomLevel={15}
+                        centerCoordinate={[ location.longitude, location.latitude ]}
+                    />
+                    <MapboxGL.UserLocation 
+                        animated={true}
+                    />
+                    </MapboxGL.MapView>
+                    <View style={styles.sensorContainer}>
+                        <View style={styles.sensorData}>
+                            <Text style={styles.sensorDataText}>{location.latitude} </Text>
+                            <Text style={styles.DataTypeText}>latitude</Text>
+                        </View>
+                        <View style={styles.sensorData}>
+                            <Text style={styles.sensorDataText}>{location.longitude}</Text>
+                            <Text style={styles.DataTypeText}>longitude</Text>
+                        </View>
                     </View>
                 </View>
             </Fragment>
@@ -100,24 +116,31 @@ export class Location extends Component {
 export default connect()(Location)
 
 const styles = StyleSheet.create({
+    locationContainer: {
+        flex: 1,
+        elevation: 1,
+        borderRadius: 25,
+        margin: 10,
+        backgroundColor: "#ffffff",
+        overflow: "hidden"
+    },
     sensorContainer: {
-      backgroundColor: "#ffffff",
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-around",
-      borderRadius: 25,
-      margin: 10,
-      backgroundColor: "#1d1d1d",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-around",
     },
     sensorData: {
-      padding: 20
+         padding: 20
     },
     sensorDataText: {
-      fontSize: 30,
-      color: "#ffffff"
+        fontSize: 30,
+        color: "#000000"
     },
     DataTypeText: {
-      textAlign: "center",
-      color: "#ffffff"
+        textAlign: "center",
+        color: "#000000"
+    },
+    map: {
+        flex: 1,
     }
   });

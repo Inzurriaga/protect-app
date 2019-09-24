@@ -81,6 +81,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -129,7 +130,7 @@ android {
 
     defaultConfig {
         applicationId "com.hackathonapp"
-        minSdkVersion 18
+        minSdkVersion 28
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -196,6 +197,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "com.google.android.gms:play-services-base:16.0.1" // for geolocation
     implementation "com.google.android.gms:play-services-location:16.0.0" // for geolocation 
+    implementation project(':@react-native-mapbox-gl_maps') // for map
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
       debugImplementation files(hermesPath + "hermes-debug.aar")

@@ -31,12 +31,13 @@ export class Header extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#000000",
+    elevation: 3,
+    backgroundColor: "#ffffff",
     height: 80,
     padding: 20
   },
   title: {
-    color: "#ffffff",
+    color: "#000000",
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",

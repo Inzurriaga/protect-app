@@ -13,3 +13,8 @@ export const bluetoothConnection = (bool) => ({
   type: "BLUETOOTH_CONNECTION",
   bool
 })
+
+export const changePage = (page) => ({
+  type: "CHANGE_PAGE",
+  page
+}) 

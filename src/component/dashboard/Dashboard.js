@@ -11,6 +11,7 @@ import {
 } from "react-native";
 // import BackgroundTimer from "react-native-background-timer";
 import { BleManager } from "react-native-ble-plx";
+import { Card } from "react-native-material-ui";
 import Location from "../location/Location"
 import { bluetoothConnection } from "../../action"
 
@@ -82,7 +83,7 @@ export class DashBoard extends Component {
     const { user } = this.state;
     return(
       <Fragment>
-        <SafeAreaView>
+        <SafeAreaView style={styles.dashBoard}>
           <View style={styles.sensorContainer}>
             <View style={styles.sensorData}>
               <Text style={styles.sensorDataText}>{user.pulse} bpm</Text>
@@ -133,24 +134,27 @@ export const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(DashBoard)
 
 const styles = StyleSheet.create({
+  dashBoard: {
+    flex: 1,
+  },
   sensorContainer: {
-    backgroundColor: "#ffffff",
     display: "flex",
     flexDirection: "row",
+    elevation: 1,
     justifyContent: "space-around",
     borderRadius: 25,
     margin: 10,
-    backgroundColor: "#1d1d1d",
+    backgroundColor: "#ffffff",
   },
   sensorData: {
     padding: 20,
   },
   sensorDataText: {
     fontSize: 30,
-    color: "#ffffff"
+    color: "#000000"
   },
   DataTypeText: {
     textAlign: "center",
-    color: "#ffffff"
+    color: "#000000"
   }
 });
