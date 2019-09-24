@@ -198,6 +198,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:16.0.1" // for geolocation
     implementation "com.google.android.gms:play-services-location:16.0.0" // for geolocation 
     implementation project(':@react-native-mapbox-gl_maps') // for map
+    implementation project(':react-native-datetimepicker') // for date
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
       debugImplementation files(hermesPath + "hermes-debug.aar")

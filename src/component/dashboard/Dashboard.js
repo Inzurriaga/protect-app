@@ -11,7 +11,6 @@ import {
 } from "react-native";
 // import BackgroundTimer from "react-native-background-timer";
 import { BleManager } from "react-native-ble-plx";
-import { Card } from "react-native-material-ui";
 import Location from "../location/Location"
 import { bluetoothConnection } from "../../action"
 
@@ -24,14 +23,14 @@ export class DashBoard extends Component {
     super();
     this.state = {
       user: {
-        userId: 123,
+        userId: 0,
         name: "bill",
-        pulse: 97,
-        sp02: 95,
+        pulse: 0,
+        sp02: 0,
         temperature: 0,
-        co2: 180,
-        co: 90,
-        h2s: 90,
+        co2: 0,
+        co: 0,
+        h2s: 0,
       },
       bluetoothScanning: true,
     }

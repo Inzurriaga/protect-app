@@ -15,7 +15,9 @@ import com.ocetnik.timer.BackgroundTimerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.mapbox.rctmgl.RCTMGLPackage;
+
+import com.mapbox.rctmgl.RCTMGLPackage; // map
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage; // date
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
       // packages.add(new RCTMGLPackage());
+      // packages.add(new RNDateTimePickerPackage());
       return packages;
     }
 
